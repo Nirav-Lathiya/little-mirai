@@ -1,0 +1,22 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="faviconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80"/>
+      <stop offset="50%" style="stop-color:#60a5fa"/>
+      <stop offset="100%" style="stop-color:#f472b6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Baby bootie -->
+  <path d="M6 14 Q6 10 10 10 L14 10 Q16 10 16 12 L16 18 Q16 20 14 20 L8 20 Q6 20 6 18 Z"
+        fill="url(#faviconGradient)"/>
+  <!-- Sole -->
+  <rect x="4" y="19" width="14" height="2" rx="1" fill="#1f2937"/>
+  <!-- Laces -->
+  <circle cx="10" cy="12" r="0.8" fill="#ffffff"/>
+  <circle cx="12" cy="12" r="0.8" fill="#ffffff"/>
+
+  <!-- Small bib -->
+  <path d="M18 12 Q18 10 20 10 L24 10 Q26 10 26 12 L25 18 Q25 20 23 20 L19 20 Q17 20 17 18 Z"
+        fill="url(#faviconGradient)" opacity="0.8"/>
+</svg>

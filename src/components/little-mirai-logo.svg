@@ -1,0 +1,65 @@
+<svg width="240" height="70" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradients -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#60a5fa;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.15)"/>
+    </filter>
+  </defs>
+
+  <!-- Baby bootie and bib combination -->
+  <g transform="translate(15, 20)">
+    <!-- Bootie shape -->
+    <path d="M8 18 Q8 12 14 12 L20 12 Q23 12 23 15 L23 25 Q23 28 20 28 L11 28 Q8 28 8 25 Z"
+          fill="url(#logoGradient)"
+          filter="url(#shadow)"/>
+    <!-- Bootie sole -->
+    <rect x="5" y="27" width="20" height="2" rx="1" fill="#1f2937"/>
+    <!-- Bootie laces -->
+    <circle cx="14" cy="15" r="1" fill="#ffffff"/>
+    <circle cx="17" cy="15" r="1" fill="#ffffff"/>
+    <circle cx="15.5" cy="18" r="0.8" fill="#ffffff"/>
+  </g>
+
+  <!-- Bib shape -->
+  <g transform="translate(35, 15)">
+    <path d="M0 10 Q0 5 5 5 L15 5 Q20 5 20 10 L18 25 Q18 30 13 30 L7 30 Q2 30 2 25 Z"
+          fill="url(#logoGradient)"
+          filter="url(#shadow)"/>
+    <!-- Bib neck strap -->
+    <rect x="8" y="0" width="4" height="8" rx="2" fill="url(#logoGradient)"/>
+    <!-- Bib pocket -->
+    <rect x="6" y="18" width="8" height="6" rx="2" fill="#ffffff" opacity="0.8"/>
+  </g>
+
+  <!-- Text "Little Mirai" -->
+  <text x="85" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="url(#textGradient)">
+    Little
+  </text>
+  <text x="85" y="50" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="url(#textGradient)">
+    Mirai
+  </text>
+
+  <!-- Decorative hearts -->
+  <g transform="translate(210, 15)">
+    <path d="M5 10 C5 7, 8 5, 10 7 C12 5, 15 7, 15 10 C15 12, 10 15, 10 15 C10 15, 5 12, 5 10 Z"
+          fill="#f472b6" opacity="0.7"/>
+  </g>
+  <g transform="translate(200, 35)">
+    <path d="M3 7 C3 5, 5 4, 7 5 C8 4, 10 5, 10 7 C10 8, 7 10, 7 10 C7 10, 3 8, 3 7 Z"
+          fill="#60a5fa" opacity="0.7"/>
+  </g>
+
+  <!-- Tagline -->
+  <text x="85" y="62" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">
+    Precious Baby Wear
+  </text>
+</svg>
