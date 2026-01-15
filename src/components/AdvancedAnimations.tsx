@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react"
 import { motion, useInView, useMotionValue, useSpring, useTransform, AnimatePresence } from "framer-motion"
+import { useInView as useInViewObserver } from "react-intersection-observer"
 
 // Simple particle system for magical effects
 export const ParticleSystem = ({ count = 12, colors = ["#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A"] }: { count?: number, colors?: string[] }) => {
@@ -345,6 +346,402 @@ export const TiltCard = ({ children, className, tiltIntensity = 10 }: {
       }}
     >
       {children}
+    </motion.div>
+  )
+}
+// Advanced Text Animation Components
+
+// Sequential word reveal animation
+export const SequentialTextReveal = ({
+  text,
+  className,
+  delay = 0,
+  wordDelay = 0.1
+}: {
+  text: string,
+  className?: string,
+  delay?: number,
+  wordDelay?: number
+}) => {
+  const words = text.split(" ")
+
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={{
+        visible: {
+          transition: {
+            staggerChildren: wordDelay,
+            delayChildren: delay
+          }
+        }
+      }}
+    >
+      {words.map((word, index) => (
+        <motion.span
+          key={index}
+          className="inline-block mr-2"
+          variants={{
+            hidden: {
+              opacity: 0,
+              y: 20,
+              filter: "blur(10px)"
+            },
+            visible: {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              transition: {
+                duration: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            }
+          }}
+        >
+          {word}
+        </motion.span>
+      ))}
+    </motion.div>
+  )
+}
+
+// Advanced typewriter with cursor and sound-like effect
+export const AdvancedTypewriter = ({
+  text,
+  className,
+  speed = 50,
+  delay = 0,
+  cursorColor = "#6366f1",
+  onComplete
+}: {
+  text: string,
+  className?: string,
+  speed?: number,
+  delay?: number,
+  cursorColor?: string,
+  onComplete?: () => void
+}) => {
+  const [displayText, setDisplayText] = useState("")
+  const [isComplete, setIsComplete] = useState(false)
+  const [showCursor, setShowCursor] = useState(true)
+
+  useEffect(() => {
+    const startTyping = () => {
+      let i = 0
+      const timer = setInterval(() => {
+        if (i < text.length) {
+          setDisplayText(prev => prev + text[i])
+          i++
+        } else {
+          setIsComplete(true)
+          setShowCursor(false)
+          clearInterval(timer)
+          if (onComplete) onComplete()
+        }
+      }, speed)
+
+      return () => clearInterval(timer)
+    }
+
+    const delayTimer = setTimeout(startTyping, delay * 1000)
+    return () => clearTimeout(delayTimer)
+  }, [text, speed, delay, onComplete])
+
+  return (
+    <span className={`${className} relative`}>
+      {displayText}
+      {showCursor && (
+        <motion.span
+          className="inline-block ml-1 w-0.5 bg-current"
+          style={{ backgroundColor: cursorColor }}
+          animate={{
+            opacity: [1, 0],
+            height: ["1em", "1.2em", "1em"]
+          }}
+          transition={{
+            opacity: { duration: 0.8, repeat: Infinity, repeatType: "reverse" },
+            height: { duration: 0.8, repeat: Infinity, repeatType: "reverse" }
+          }}
+        />
+      )}
+    </span>
+  )
+}
+
+// Morphing text effect
+export const MorphingText = ({
+  texts,
+  className,
+  duration = 2000
+}: {
+  texts: string[],
+  className?: string,
+  duration?: number
+}) => {
+  const [currentIndex, setCurrentIndex] = useState(0)
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % texts.length)
+    }, duration)
+
+    return () => clearInterval(interval)
+  }, [texts.length, duration])
+
+  return (
+    <motion.span
+      className={className}
+      key={currentIndex}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      transition={{ duration: 0.5 }}
+    >
+      {texts[currentIndex]}
+    </motion.span>
+  )
+}
+
+// Interactive text with hover effects
+export const InteractiveText = ({
+  text,
+  className,
+  hoverEffect = "glow"
+}: {
+  text: string,
+  className?: string,
+  hoverEffect?: "glow" | "bounce" | "scale" | "color"
+}) => {
+  const getHoverVariants = () => {
+    switch (hoverEffect) {
+      case "glow":
+        return {
+          hover: {
+            textShadow: "0 0 20px rgba(99, 102, 241, 0.5)",
+            scale: 1.05
+          }
+        }
+      case "bounce":
+        return {
+          hover: {
+            y: [-2, 2, -2],
+            transition: {
+              y: { duration: 0.6, repeat: Infinity, ease: "easeInOut" }
+            }
+          }
+        }
+      case "scale":
+        return {
+          hover: { scale: 1.1 },
+          tap: { scale: 0.95 }
+        }
+      case "color":
+        return {
+          hover: {
+            color: "#6366f1",
+            transition: { duration: 0.3 }
+          }
+        }
+      default:
+        return {}
+    }
+  }
+
+  return (
+    <motion.span
+      className={`${className} cursor-pointer select-none`}
+      variants={getHoverVariants()}
+      whileHover="hover"
+      whileTap="tap"
+    >
+      {text}
+    </motion.span>
+  )
+}
+
+// Gradient text animation
+export const GradientText = ({
+  text,
+  className,
+  colors = ["#6366f1", "#a855f7", "#ec4899", "#06b6d4"],
+  animate = true
+}: {
+  text: string,
+  className?: string,
+  colors?: string[],
+  animate?: boolean
+}) => {
+  const gradientVariants = animate ? {
+    animate: {
+      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+    },
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "linear"
+    }
+  } : {}
+
+  return (
+    <motion.span
+      className={`${className} bg-gradient-to-r bg-clip-text text-transparent`}
+      style={{
+        backgroundImage: `linear-gradient(45deg, ${colors.join(", ")})`,
+        backgroundSize: "200% 200%"
+      }}
+      variants={gradientVariants}
+      animate={animate ? "animate" : undefined}
+    >
+      {text}
+    </motion.span>
+  )
+}
+
+// Character-by-character reveal
+export const CharByCharReveal = ({
+  text,
+  className,
+  delay = 0,
+  charDelay = 0.05
+}: {
+  text: string,
+  className?: string,
+  delay?: number,
+  charDelay?: number
+}) => {
+  const chars = text.split("")
+
+  return (
+    <motion.div
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={{
+        visible: {
+          transition: {
+            staggerChildren: charDelay,
+            delayChildren: delay
+          }
+        }
+      }}
+    >
+      {chars.map((char, index) => (
+        <motion.span
+          key={index}
+          className="inline-block"
+          variants={{
+            hidden: {
+              opacity: 0,
+              y: 20,
+              rotateX: -90,
+              transformOrigin: "bottom"
+            },
+            visible: {
+              opacity: 1,
+              y: 0,
+              rotateX: 0,
+              transition: {
+                duration: 0.6,
+                ease: [0.25, 0.46, 0.45, 0.94]
+              }
+            }
+          }}
+        >
+          {char === " " ? "\u00A0" : char}
+        </motion.span>
+      ))}
+    </motion.div>
+  )
+}
+
+// Dynamic text introduction sequence
+export const DynamicIntroduction = ({
+  className
+}: {
+  className?: string
+}) => {
+  const [phase, setPhase] = useState(0)
+
+  const phases = [
+    {
+      title: "Welcome to",
+      subtitle: "Little Mirai",
+      description: "Where precious moments become treasured memories...",
+      delay: 2500
+    },
+    {
+      title: "Discover",
+      subtitle: "Tiny Treasures",
+      description: "Handcrafted clothing that celebrates every milestone...",
+      delay: 3000
+    },
+    {
+      title: "Made with",
+      subtitle: "Pure Love",
+      description: "Natural materials, gentle care, endless smiles...",
+      delay: 3000
+    },
+    {
+      title: "Join Our",
+      subtitle: "Family Journey",
+      description: "Creating beautiful memories, one outfit at a time...",
+      delay: 3500
+    }
+  ]
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPhase(prev => (prev + 1) % phases.length)
+    }, phases[phase].delay)
+
+    return () => clearTimeout(timer)
+  }, [phase])
+
+  const currentPhase = phases[phase]
+
+  return (
+    <motion.div
+      className={`${className} text-center`}
+      key={phase}
+      initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 1.1 }}
+      transition={{ duration: 0.8, ease: "easeOut" }}
+    >
+      <motion.div
+        className="text-lg md:text-xl text-muted-foreground mb-2"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.2, duration: 0.6 }}
+      >
+        {currentPhase.title}
+      </motion.div>
+
+      <motion.h1
+        className="text-4xl md:text-6xl font-bold mb-4"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.4, duration: 0.8 }}
+      >
+        <GradientText
+          text={currentPhase.subtitle}
+          colors={["#6366f1", "#a855f7", "#ec4899", "#06b6d4"]}
+          animate={true}
+        />
+      </motion.h1>
+
+      <motion.p
+        className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.6 }}
+      >
+        {currentPhase.description}
+      </motion.p>
     </motion.div>
   )
 }
