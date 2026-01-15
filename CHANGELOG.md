@@ -5,11 +5,54 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-01-15
+
+### Added
+- **Custom Logo Design**: Complete brand identity overhaul with emotional symbolism
+- **Heart + Footprint Logo**: Gradient heart representing love, baby footprint symbolizing precious moments
+- **Advanced Splash Screen**: Full-screen animated brand introduction experience
+- **Particle Animation System**: Floating magical particles with organic movement
+- **Morphing Background Shapes**: Dynamic geometric shapes for visual interest
+- **Logo Reveal Animation**: Spring-powered logo entrance with pulsing glow effects
+- **Typewriter Loading Text**: "Creating magical moments..." with animated cursor
+- **Progress Bar**: Gradient animated loading indicator
+- **Floating Decorative Elements**: Hearts, stars, sparkles, and butterflies
+- **Brand Storytelling**: Logo as visual narrative of love, care, and precious moments
+
+### Enhanced
+- **Brand Identity**: From generic bootie/bib icons to emotional heart+footprint symbolism
+- **First Impression**: Splash screen creates magical brand experience
+- **User Engagement**: 4-second immersive introduction before main site
+- **Emotional Connection**: Logo tells story of parental love and baby preciousness
+- **Visual Hierarchy**: Logo takes center stage with supporting animations
+
+### Logo Design Philosophy
+- **Heart Symbol**: Represents parental love, care, and emotional connection
+- **Baby Footprint**: Symbolizes precious first moments, milestones, and memories
+- **Sparkle Elements**: Adds magical, premium feel for childhood wonder
+- **Gradient Typography**: "Little" in soft script, "Mirai" in elegant modern font
+- **Color Palette**: Soft pinks, purples, blues conveying warmth and trust
+- **Japanese Influence**: "Mirai" (future) with subtle cultural elegance
+
+### Splash Screen Experience
+- **Stage 1**: Gentle particle field builds anticipation (0-1s)
+- **Stage 2**: Logo dramatic reveal with spring animation (1-3s)
+- **Stage 3**: Loading text and progress bar (3-4s)
+- **Stage 4**: Smooth transition to main site (4-4.8s)
+- **Total Duration**: 4.8 seconds of immersive brand experience
+
+### Technical Excellence
+- **Performance Optimized**: 60fps animations with hardware acceleration
+- **Accessibility**: Respects motion preferences, proper loading states
+- **Responsive Design**: Logo and splash screen scale perfectly
+- **SEO Friendly**: Splash screen doesn't interfere with page loading
+- **Brand Consistency**: Logo maintains visual language throughout site
+
 ## [0.4.0] - 2026-01-15
 
 ### Added
 - **Advanced Text-Based Animations**: Comprehensive text animation system for user introduction
-- **DynamicIntroduction Component**: Cycling welcome messages with gradient animated text
+- **DynamicIntroduction Component**: Cycling welcome messages with gradient text animation
 - **SequentialTextReveal**: Word-by-word animated reveals with blur-to-focus effects
 - **CharByCharReveal**: Character-by-character 3D flip animations with rotation effects
 - **InteractiveText**: Multiple hover effects (glow, bounce, scale, color transitions)
@@ -31,9 +74,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Brand Voice**: Warm, caring, premium positioning for parents
 
 ### Animation Techniques
-- **Disney-Inspired**: Magical text effects and story-driven sequences
+- **Disney-Inspired**: Magical, story-driven text sequences
 - **Apple-Inspired**: Clean, purposeful text reveals and transitions
-- **Nike-Inspired**: Dynamic, energetic text animations
+- **Nike-Inspired**: Dynamic, energetic character animations
 - **ASOS-Inspired**: Elegant, sophisticated text effects
 - **Character-by-Character**: 3D flip animations for dramatic reveals
 
