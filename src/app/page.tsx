@@ -1,78 +1,122 @@
 "use client"
 
+import React, { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
-import { ShoppingCart, Heart, Search, Menu, Star, Truck, Shield, Award } from "lucide-react"
+import { ShoppingCart, Heart, Search, Menu, Star, Truck, Shield, Award, ChevronDown, Grid, List, Package } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { ProductModal } from "@/components/ProductModal"
 import { CartModal } from "@/components/CartModal"
+import { ProductFilters, ProductFiltersMobile, FilterState } from "@/components/ProductFilters"
 import { babyProducts } from "@/lib/data"
 import { useCart } from "@/context/CartContext"
-import Link from "next/link"
 
 
 
 function ProductCard({ product }: { product: typeof babyProducts[0] }) {
+  const { dispatch } = useCart()
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    dispatch({
+      type: 'ADD_ITEM',
+      payload: {
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        originalPrice: product.originalPrice,
+        image: product.image,
+        selectedSize: product.sizes?.[0] || 'One Size',
+        selectedColor: product.colors?.[0] || 'Default',
+        isSale: product.isSale
+      }
+    })
+  }
+
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    // Wishlist functionality would be implemented here
+  }
+
   return (
     <ProductModal product={product}>
-      <Card className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-1 border border-border/50 hover:border-primary/20 bg-card">
+      <Card className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 border border-border/50 hover:border-primary/20 bg-card h-full">
         <CardHeader className="p-0">
-          <div className="relative aspect-square bg-gradient-to-br from-primary/5 to-accent/10 rounded-t-lg overflow-hidden border-b">
+          <div className="relative aspect-square bg-gradient-to-br from-primary/5 to-accent/10 rounded-t-lg overflow-hidden">
             <Image
               src={product.image}
               alt={`Baby wearing ${product.name.toLowerCase()}`}
               fill
-              className="object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="object-cover transition-all duration-500 group-hover:scale-110"
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 25vw, 20vw"
             />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
             {product.isNew && (
-              <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground font-medium">New</Badge>
+              <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground font-semibold shadow-sm">New</Badge>
             )}
             {product.isSale && (
-              <Badge className="absolute top-3 right-3 bg-destructive text-destructive-foreground font-medium">Sale</Badge>
+              <Badge className="absolute top-3 right-3 bg-destructive text-destructive-foreground font-semibold shadow-sm">Sale</Badge>
             )}
+            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <Button
+                variant="secondary"
+                size="icon"
+                className="w-8 h-8 bg-white/90 hover:bg-white shadow-sm"
+                onClick={handleWishlist}
+              >
+                <Heart className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-5 flex-1 flex flex-col">
           <div className="flex items-center gap-2 mb-3">
-            <Badge variant="secondary" className="text-xs font-medium px-2 py-1">{product.category}</Badge>
+            <Badge variant="secondary" className="text-xs font-medium px-2 py-1 bg-primary/10 text-primary border-primary/20">
+              {product.category}
+            </Badge>
           </div>
-          <CardTitle className="text-lg font-semibold mb-2 line-clamp-2 leading-tight">{product.name}</CardTitle>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2">{product.description}</p>
+          <CardTitle className="text-lg font-semibold mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+            {product.name}
+          </CardTitle>
+          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed flex-1">
+            {product.description}
+          </p>
           <div className="flex items-center gap-2 mb-4">
-            <div className="flex items-center">
+            <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`}
+                  className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/50'}`}
                 />
               ))}
             </div>
             <span className="text-sm text-muted-foreground font-medium">({product.reviews})</span>
           </div>
-          <div className="flex items-baseline gap-3">
-            <span className="text-2xl font-bold text-primary">${product.price}</span>
+          <div className="flex items-baseline gap-3 mb-4">
+            <span className="text-2xl font-bold text-primary">₹{product.price}</span>
             {product.originalPrice && (
-              <span className="text-sm text-muted-foreground line-through font-medium">${product.originalPrice}</span>
+              <span className="text-sm text-muted-foreground line-through font-medium">₹{product.originalPrice}</span>
+            )}
+            {product.originalPrice && (
+              <Badge variant="destructive" className="text-xs ml-auto">
+                {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
+              </Badge>
             )}
           </div>
         </CardContent>
-        <CardFooter className="p-6 pt-0 flex gap-3">
-          <Button className="flex-1 font-semibold">
+        <CardFooter className="p-5 pt-0">
+          <Button
+            className="w-full font-semibold h-11"
+            onClick={handleAddToCart}
+          >
             <ShoppingCart className="w-4 h-4 mr-2" />
             Add to Cart
-          </Button>
-          <Button variant="outline" size="icon" className="shrink-0">
-            <Heart className="w-4 h-4" />
           </Button>
         </CardFooter>
       </Card>
@@ -80,9 +124,74 @@ function ProductCard({ product }: { product: typeof babyProducts[0] }) {
   )
 }
 
+// Filter products based on filter state
+function filterProducts(products: typeof babyProducts, filters: FilterState): typeof babyProducts {
+  return products.filter(product => {
+    // Category filter
+    if (filters.categories.length > 0 && !filters.categories.includes(product.category)) {
+      return false
+    }
+
+    // Size filter
+    if (filters.sizes.length > 0 && !product.sizes.some(size => filters.sizes.includes(size))) {
+      return false
+    }
+
+    // Price range filter
+    if (filters.priceRanges.length > 0) {
+      const price = product.price
+      const matchesPriceRange = filters.priceRanges.some(range => {
+        switch (range) {
+          case '$0-25':
+            return price >= 0 && price < 25
+          case '$25-50':
+            return price >= 25 && price < 50
+          case '$50+':
+            return price >= 50
+          default:
+            return false
+        }
+      })
+      if (!matchesPriceRange) {
+        return false
+      }
+    }
+
+    return true
+  })
+}
+
 export default function Home() {
   const { state } = useCart()
   const itemCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
+  const [sortBy, setSortBy] = useState('newest')
+  const [showCount, setShowCount] = useState(8)
+  const [filters, setFilters] = useState<FilterState>({
+    categories: [],
+    sizes: [],
+    ageGroups: [],
+    priceRanges: []
+  })
+
+  const filteredProducts = filterProducts(babyProducts, filters)
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    switch (sortBy) {
+      case 'price-low':
+        return a.price - b.price
+      case 'price-high':
+        return b.price - a.price
+      case 'rating':
+        return b.rating - a.rating
+      case 'popular':
+        return b.reviews - a.reviews
+      case 'newest':
+      default:
+        return b.id - a.id // Assuming higher ID means newer
+    }
+  })
+
+  const productsToShow = sortedProducts.slice(0, showCount)
 
   return (
     <div className="min-h-screen bg-background">
@@ -228,24 +337,110 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured Products */}
-      <section className="py-24 px-6" id="products">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">Adorable Collection</h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              Discover our beautiful collection of baby booties, bibs, socks, and clothing, each piece
-              handcrafted with love using premium natural materials. Perfect for your precious Little Mirai.
-            </p>
-          </div>
+       {/* Featured Products */}
+       <section className="py-24 px-6 bg-muted/10" id="products">
+         <div className="container mx-auto">
+           <div className="text-center mb-16">
+             <h2 className="text-4xl md:text-5xl font-bold mb-6">Adorable Collection</h2>
+             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+               Discover our beautiful collection of baby booties, bibs, socks, and clothing, each piece
+               handcrafted with love using premium natural materials. Perfect for your precious Little Mirai.
+             </p>
+           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {babyProducts.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
-          </div>
-        </div>
-      </section>
+           {/* Filters and Sorting */}
+           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
+             {/* Desktop Filters Sidebar */}
+             <div className="hidden lg:block">
+               <ProductFilters
+                 filters={filters}
+                 onFiltersChange={setFilters}
+                 className="sticky top-24"
+               />
+             </div>
+
+             {/* Main Content */}
+             <div className="lg:col-span-3">
+               {/* Sorting and Filter Controls */}
+               <div className="flex flex-col sm:flex-row gap-4 mb-8 items-center justify-between">
+                 <div className="flex items-center gap-4">
+                   <ProductFiltersMobile
+                     filters={filters}
+                     onFiltersChange={setFilters}
+                   />
+                   <span className="text-sm font-medium text-muted-foreground">
+                     Showing {productsToShow.length} of {sortedProducts.length} products
+                   </span>
+                 </div>
+                 <div className="flex items-center gap-4">
+                   <div className="flex items-center gap-2">
+                     <span className="text-sm font-medium">Sort by:</span>
+                     <DropdownMenu>
+                       <DropdownMenuTrigger asChild>
+                         <Button variant="outline" size="sm" className="w-40 justify-between">
+                           {sortBy === 'newest' && 'Newest First'}
+                           {sortBy === 'price-low' && 'Price: Low to High'}
+                           {sortBy === 'price-high' && 'Price: High to Low'}
+                           {sortBy === 'rating' && 'Best Rated'}
+                           {sortBy === 'popular' && 'Most Popular'}
+                           <ChevronDown className="w-4 h-4 ml-2" />
+                         </Button>
+                       </DropdownMenuTrigger>
+                       <DropdownMenuContent align="end">
+                         <DropdownMenuItem onClick={() => setSortBy('newest')}>Newest First</DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => setSortBy('price-low')}>Price: Low to High</DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => setSortBy('price-high')}>Price: High to Low</DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => setSortBy('rating')}>Best Rated</DropdownMenuItem>
+                         <DropdownMenuItem onClick={() => setSortBy('popular')}>Most Popular</DropdownMenuItem>
+                       </DropdownMenuContent>
+                     </DropdownMenu>
+                   </div>
+                   <div className="flex items-center gap-2">
+                     <span className="text-sm font-medium">View:</span>
+                     <div className="flex border rounded-md">
+                       <Button variant="ghost" size="sm" className="px-3 py-2 rounded-r-none border-r">
+                         <Grid className="w-4 h-4" />
+                       </Button>
+                       <Button variant="ghost" size="sm" className="px-3 py-2 rounded-l-none">
+                         <List className="w-4 h-4" />
+                       </Button>
+                     </div>
+                   </div>
+                 </div>
+               </div>
+
+               {/* Product Grid */}
+               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+                 {productsToShow.length === 0 ? (
+                   <div className="col-span-full text-center py-16">
+                     <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                     <h3 className="text-lg font-semibold mb-2">No products found</h3>
+                     <p className="text-muted-foreground">Try adjusting your filters or check back later for new arrivals.</p>
+                   </div>
+                 ) : (
+                   productsToShow.map((product) => (
+                     <ProductCard key={product.id} product={product} />
+                   ))
+                 )}
+               </div>
+
+               {/* Load More Button */}
+               {productsToShow.length < sortedProducts.length && (
+                 <div className="text-center mt-16">
+                   <Button
+                     variant="outline"
+                     size="lg"
+                     className="px-8"
+                     onClick={() => setShowCount(prev => Math.min(prev + 8, sortedProducts.length))}
+                   >
+                     Load More Products ({sortedProducts.length - productsToShow.length} remaining)
+                   </Button>
+                 </div>
+               )}
+             </div>
+           </div>
+         </div>
+       </section>
 
       {/* Newsletter */}
       <section className="py-24 px-6 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5">

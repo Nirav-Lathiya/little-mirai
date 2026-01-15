@@ -1,6 +1,7 @@
 "use client"
 
 import Image from "next/image"
+import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Badge } from "@/components/ui/badge"
@@ -99,14 +100,14 @@ export function CartModal({ children }: CartModalProps) {
                           <Plus className="w-3 h-3" />
                         </Button>
                       </div>
-                      <div className="text-right">
-                        <div className="font-medium">${(item.price * item.quantity).toFixed(2)}</div>
-                        {item.originalPrice && item.isSale && (
-                          <div className="text-sm text-muted-foreground line-through">
-                            ${(item.originalPrice * item.quantity).toFixed(2)}
-                          </div>
-                        )}
-                      </div>
+                       <div className="text-right">
+                         <div className="font-medium">₹{(item.price * item.quantity).toFixed(2)}</div>
+                         {item.originalPrice && item.isSale && (
+                           <div className="text-sm text-muted-foreground line-through">
+                             ₹{(item.originalPrice * item.quantity).toFixed(2)}
+                           </div>
+                         )}
+                       </div>
                     </div>
                   </div>
 
@@ -123,36 +124,48 @@ export function CartModal({ children }: CartModalProps) {
 
               <Separator />
 
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Subtotal</span>
-                  <span>${subtotal.toFixed(2)}</span>
-                </div>
-                {discount > 0 && (
-                  <div className="flex justify-between text-green-600">
-                    <span>Discount</span>
-                    <span>-${discount.toFixed(2)}</span>
-                  </div>
-                )}
-                <div className="flex justify-between">
-                  <span>Shipping</span>
-                  <span className="text-green-600">Free</span>
-                </div>
-                <Separator />
-                <div className="flex justify-between font-semibold text-lg">
-                  <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
-                </div>
-              </div>
+               <div className="space-y-2">
+                 <div className="flex justify-between">
+                   <span>Subtotal</span>
+                   <span>₹{subtotal.toFixed(2)}</span>
+                 </div>
+                 {discount > 0 && (
+                   <div className="flex justify-between text-green-600">
+                     <span>Discount</span>
+                     <span>-₹{discount.toFixed(2)}</span>
+                   </div>
+                 )}
+                 <div className="flex justify-between">
+                   <span>Shipping</span>
+                   <span className="text-green-600">Free</span>
+                 </div>
+                 <Separator />
+                 <div className="flex justify-between font-semibold text-lg">
+                   <span>Total</span>
+                   <span>₹{total.toFixed(2)}</span>
+                 </div>
+               </div>
 
-              <div className="flex gap-3 pt-4">
-                <Button className="flex-1" size="lg">
-                  Proceed to Checkout
-                </Button>
-                <Button variant="outline" className="flex-1" size="lg">
-                  Continue Shopping
-                </Button>
-              </div>
+               <div className="flex gap-3 pt-4">
+                 <Button
+                   className="flex-1"
+                   size="lg"
+                   asChild
+                   onClick={() => dispatch({ type: 'CLOSE_CART' })}
+                 >
+                   <Link href="/checkout">
+                     Proceed to Checkout
+                   </Link>
+                 </Button>
+                 <Button
+                   variant="outline"
+                   className="flex-1"
+                   size="lg"
+                   onClick={() => dispatch({ type: 'CLOSE_CART' })}
+                 >
+                   Continue Shopping
+                 </Button>
+               </div>
             </div>
           )}
         </div>

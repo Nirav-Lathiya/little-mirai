@@ -150,20 +150,20 @@ export default function ProductPage() {
               <div className="flex items-baseline gap-4 mb-3">
                 {product.originalPrice && product.isSale && (
                   <span className="text-2xl text-gray-500 line-through">
-                    ${product.originalPrice}
+                    ₹{product.originalPrice}
                   </span>
                 )}
                 <span className="text-5xl font-bold text-primary">
-                  ${product.price}
+                  ₹{product.price}
                 </span>
                 {savings > 0 && (
                   <Badge variant="secondary" className="bg-green-100 text-green-800 px-4 py-2 text-base font-semibold">
-                    Save ${savings.toFixed(2)}
+                    Save ₹{savings.toFixed(2)}
                   </Badge>
                 )}
               </div>
               <p className="text-base text-gray-600 dark:text-gray-400">
-                Price per item • Free shipping on orders over $50
+                Price per item • Free shipping on orders over ₹500
               </p>
             </div>
 
@@ -248,7 +248,7 @@ export default function ProductPage() {
               <div className="bg-primary/10 dark:bg-primary/20 p-6 rounded-xl mb-8 border border-primary/20">
                 <div className="flex justify-between items-center">
                   <span className="text-lg font-medium">Total ({quantity} items):</span>
-                  <span className="text-3xl font-bold text-primary">${totalPrice.toFixed(2)}</span>
+                  <span className="text-3xl font-bold text-primary">₹{totalPrice.toFixed(2)}</span>
                 </div>
               </div>
             )}
@@ -261,7 +261,7 @@ export default function ProductPage() {
                 size="lg"
               >
                 <ShoppingCart className="w-6 h-6 mr-3" />
-                Add to Cart • ${totalPrice.toFixed(2)}
+                Add to Cart • ₹{totalPrice.toFixed(2)}
               </Button>
               <Button
                 variant="outline"
@@ -291,7 +291,7 @@ export default function ProductPage() {
                     <div className="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
                       <Truck className="w-5 h-5 text-green-600 dark:text-green-400" />
                     </div>
-                    <span className="font-medium">Free shipping over $50</span>
+                    <span className="font-medium">Free shipping over ₹500</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">

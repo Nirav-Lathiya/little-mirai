@@ -120,24 +120,24 @@ export function ProductModal({ product, children }: ProductModalProps) {
 
             {/* Price */}
             <div className="mb-6">
-              <div className="flex items-baseline gap-3 mb-2">
-                {product.originalPrice && product.isSale && (
-                  <span className="text-lg text-gray-500 line-through">
-                    ${product.originalPrice}
-                  </span>
-                )}
-                <span className="text-3xl font-bold text-primary">
-                  ${product.price}
-                </span>
-                {savings > 0 && (
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">
-                    Save ${savings.toFixed(2)}
-                  </Badge>
-                )}
-              </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
-                Price per item • Free shipping on orders over $50
-              </p>
+               <div className="flex items-baseline gap-3 mb-2">
+                 {product.originalPrice && product.isSale && (
+                   <span className="text-lg text-gray-500 line-through">
+                     ₹{product.originalPrice}
+                   </span>
+                 )}
+                 <span className="text-3xl font-bold text-primary">
+                   ₹{product.price}
+                 </span>
+                 {savings > 0 && (
+                   <Badge variant="secondary" className="bg-green-100 text-green-800">
+                     Save ₹{savings.toFixed(2)}
+                   </Badge>
+                 )}
+               </div>
+               <p className="text-sm text-gray-600 dark:text-gray-400">
+                 Price per item • Free shipping on orders over ₹500
+               </p>
             </div>
 
             <Separator className="my-6" />
@@ -230,7 +230,7 @@ export function ProductModal({ product, children }: ProductModalProps) {
               <div className="bg-primary/5 dark:bg-primary/10 p-3 rounded-lg mb-6">
                 <div className="flex justify-between items-center">
                   <span className="text-sm font-medium">Total ({quantity} items):</span>
-                  <span className="text-lg font-bold text-primary">${totalPrice.toFixed(2)}</span>
+                  <span className="text-lg font-bold text-primary">₹{totalPrice.toFixed(2)}</span>
                 </div>
               </div>
             )}
@@ -239,7 +239,7 @@ export function ProductModal({ product, children }: ProductModalProps) {
             <div className="flex gap-3 mb-6">
               <Button onClick={handleAddToCart} className="flex-1" size="lg">
                 <ShoppingCart className="w-4 h-4 mr-2" />
-                Add to Cart • ${totalPrice.toFixed(2)}
+                Add to Cart • ₹{totalPrice.toFixed(2)}
               </Button>
               <Button variant="outline" size="lg" className="px-4">
                 <Heart className="w-4 h-4" />
@@ -258,7 +258,7 @@ export function ProductModal({ product, children }: ProductModalProps) {
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div className="flex items-center gap-2">
                   <Truck className="w-4 h-4 text-green-600" />
-                  <span>Free shipping over $50</span>
+                  <span>Free shipping over ₹500</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-blue-600" />
