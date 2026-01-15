@@ -14,6 +14,16 @@ import { ThemeToggle } from "@/components/theme-toggle"
 import { ProductModal } from "@/components/ProductModal"
 import { CartModal } from "@/components/CartModal"
 import { ProductFilters, ProductFiltersMobile, FilterState } from "@/components/ProductFilters"
+import {
+  ParticleSystem,
+  MorphingBackground,
+  RippleButton,
+  ProgressiveReveal,
+  FloatingIcon,
+  TypewriterText,
+  ParallaxBackground,
+  TiltCard
+} from "@/components/AdvancedAnimations"
 import { babyProducts } from "@/lib/data"
 import { useCart } from "@/context/CartContext"
 import { motion, useAnimation, useInView } from "framer-motion"
@@ -40,25 +50,7 @@ const staggerContainerVariants = {
   }
 }
 
-const staggerItemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 }
-}
 
-const floatVariants = {
-  animate: {
-    y: [-10, 10, -10],
-    transition: {
-      duration: 3,
-      repeat: Infinity
-    }
-  }
-}
-
-const scaleVariants = {
-  hover: { scale: 1.05 },
-  tap: { scale: 0.95 }
-}
 
 // Animated components
 const AnimatedSection = ({ children, className, delay = 0, id }: { children: React.ReactNode, className?: string, delay?: number, id?: string }) => {
@@ -86,18 +78,6 @@ const AnimatedSection = ({ children, className, delay = 0, id }: { children: Rea
     </motion.section>
   )
 }
-
-const FloatingIcon = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
-  <motion.div
-    variants={floatVariants}
-    animate="animate"
-    style={{
-      animationDelay: `${delay}s`
-    }}
-  >
-    {children}
-  </motion.div>
-)
 
 function ProductCard({ product }: { product: typeof babyProducts[0] }) {
   const { dispatch } = useCart()
@@ -421,161 +401,202 @@ export default function Home() {
       </nav>
 
        {/* Hero Section */}
-       <motion.section
-         className="py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/10 relative overflow-hidden"
-         initial="hidden"
-         animate="visible"
-         variants={staggerContainerVariants}
-       >
-         {/* Floating Background Elements */}
-         <div className="absolute inset-0 pointer-events-none">
-           <FloatingIcon delay={0}>
-             <div className="absolute top-20 left-10 text-primary/20">
-               <Baby className="w-12 h-12" />
-             </div>
-           </FloatingIcon>
-           <FloatingIcon delay={1}>
-             <div className="absolute top-40 right-20 text-accent/20">
-               <Sparkles className="w-10 h-10" />
-             </div>
-           </FloatingIcon>
-           <FloatingIcon delay={2}>
-             <div className="absolute bottom-32 left-20 text-primary/15">
-               <HeartIcon className="w-8 h-8" />
-             </div>
-           </FloatingIcon>
-           <FloatingIcon delay={0.5}>
-             <div className="absolute bottom-20 right-10 text-accent/20">
-               <Sparkles className="w-6 h-6" />
-             </div>
-           </FloatingIcon>
-         </div>
+       <ParallaxBackground speed={0.3}>
+         <motion.section
+           className="py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/10 relative overflow-hidden"
+           initial={{ opacity: 0, scale: 0.95 }}
+           animate={{ opacity: 1, scale: 1 }}
+           transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+         >
+           {/* Advanced Background Effects */}
+           <ParticleSystem count={20} colors={["#6366f1", "#a855f7", "#ec4899", "#06b6d4"]} />
+           <MorphingBackground className="opacity-30" />
 
-         <div className="container mx-auto text-center relative z-10">
-           <motion.h1
-             className="text-5xl md:text-7xl font-bold mb-8 text-foreground leading-tight tracking-tight"
-             variants={staggerItemVariants}
-           >
-             <motion.span variants={itemVariants}>Precious Little</motion.span><br />
-             <motion.span
-               className="text-primary"
-               variants={itemVariants}
+           {/* Floating Background Elements */}
+           <div className="absolute inset-0 pointer-events-none">
+             <FloatingIcon
+               icon={Baby}
+               className="absolute top-20 left-10 text-primary/20"
+               delay={0}
+             />
+             <FloatingIcon
+               icon={Sparkles}
+               className="absolute top-40 right-20 text-accent/20"
+               delay={1}
+             />
+             <FloatingIcon
+               icon={HeartIcon}
+               className="absolute bottom-32 left-20 text-primary/15"
+               delay={2}
+             />
+             <FloatingIcon
+               icon={Sparkles}
+               className="absolute bottom-20 right-10 text-accent/20"
+               delay={0.5}
+             />
+           </div>
+
+           <div className="container mx-auto text-center relative z-10">
+             <motion.div
+               initial={{ opacity: 0, y: 50 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8, delay: 0.2 }}
              >
-               Mirai
-             </motion.span>
-           </motion.h1>
+               <h1 className="text-5xl md:text-7xl font-bold mb-8 text-foreground leading-tight tracking-tight">
+                 <TypewriterText
+                   text="Precious Little"
+                   className="block"
+                   speed={100}
+                 />
+                 <motion.span
+                   className="text-primary block"
+                   initial={{ opacity: 0, scale: 0.8 }}
+                   animate={{ opacity: 1, scale: 1 }}
+                   transition={{ duration: 0.8, delay: 1.5 }}
+                 >
+                   Mirai
+                 </motion.span>
+               </h1>
+             </motion.div>
 
-           <motion.p
-             className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
-             variants={staggerItemVariants}
-           >
-             Discover our beautiful collection of baby booties, bibs, jhablas,
-             and socks. Handcrafted with love using premium natural materials for your precious
-             little one. Quality, comfort, and adorable style that lasts.
-           </motion.p>
+             <motion.p
+               className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
+               initial={{ opacity: 0, y: 30 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8, delay: 0.8 }}
+             >
+               Discover our beautiful collection of baby booties, bibs, jhablas,
+               and socks. Handcrafted with love using premium natural materials for your precious
+               little one. Quality, comfort, and adorable style that lasts.
+             </motion.p>
 
-           <motion.div
-             className="flex flex-col sm:flex-row gap-6 justify-center"
-             variants={staggerItemVariants}
-           >
-             <motion.div variants={scaleVariants} whileHover="hover" whileTap="tap">
-               <Button size="lg" className="text-lg px-10 py-4 h-auto font-semibold">
+             <motion.div
+               className="flex flex-col sm:flex-row gap-6 justify-center"
+               initial={{ opacity: 0, y: 30 }}
+               animate={{ opacity: 1, y: 0 }}
+               transition={{ duration: 0.8, delay: 1.2 }}
+             >
+               <RippleButton className="text-lg px-10 py-4 h-auto font-semibold bg-primary text-primary-foreground hover:bg-primary/90">
                  Shop Collection
-               </Button>
+               </RippleButton>
+               <motion.div
+                 whileHover={{ scale: 1.05 }}
+                 whileTap={{ scale: 0.95 }}
+               >
+                 <Button
+                   size="lg"
+                   variant="outline"
+                   className="text-lg px-10 py-4 h-auto font-semibold border-2 hover:bg-accent hover:text-accent-foreground"
+                 >
+                   Learn More
+                 </Button>
+               </motion.div>
              </motion.div>
-             <motion.div variants={scaleVariants} whileHover="hover" whileTap="tap">
-               <Button size="lg" variant="outline" className="text-lg px-10 py-4 h-auto font-semibold">
-                 Learn More
-               </Button>
-             </motion.div>
-           </motion.div>
-         </div>
-       </motion.section>
+           </div>
+         </motion.section>
+       </ParallaxBackground>
 
        {/* Features */}
        <AnimatedSection className="py-20 px-6 bg-muted/20">
          <div className="container mx-auto">
-           <motion.div
-             className="text-center mb-16"
-             initial="hidden"
-             whileInView="visible"
-             viewport={{ once: true }}
-             variants={containerVariants}
-           >
-             <motion.h2
-               className="text-3xl font-bold mb-4"
-               variants={itemVariants}
+           <ProgressiveReveal delay={200}>
+             <motion.div
+               className="text-center mb-16"
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.8 }}
              >
-               Why Choose Little Mirai
-             </motion.h2>
-             <motion.p
-               className="text-muted-foreground max-w-2xl mx-auto"
-               variants={itemVariants}
-             >
-               We create beautiful, high-quality baby clothing and accessories with love,
-               using only the finest natural materials for your precious little one.
-             </motion.p>
-           </motion.div>
+               <motion.h2
+                 className="text-3xl font-bold mb-4"
+                 initial={{ opacity: 0, scale: 0.9 }}
+                 whileInView={{ opacity: 1, scale: 1 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.6, delay: 0.2 }}
+               >
+                 Why Choose Little Mirai
+               </motion.h2>
+               <motion.p
+                 className="text-muted-foreground max-w-2xl mx-auto text-lg"
+                 initial={{ opacity: 0, y: 20 }}
+                 whileInView={{ opacity: 1, y: 0 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.6, delay: 0.4 }}
+               >
+                 We create beautiful, high-quality baby clothing and accessories with love,
+                 using only the finest natural materials for your precious little one.
+               </motion.p>
+             </motion.div>
+           </ProgressiveReveal>
 
-           <motion.div
-             className="grid grid-cols-1 md:grid-cols-3 gap-12"
-             initial="hidden"
-             whileInView="visible"
-             viewport={{ once: true, margin: "-50px" }}
-             variants={staggerContainerVariants}
-           >
+           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
              {[
                {
                  icon: Truck,
                  title: "Premium Materials",
                  description: "We use only the finest organic cotton, bamboo, merino wool, and silk. Gentle on baby's sensitive skin, naturally soft and breathable.",
-                 delay: 0
+                 color: "from-blue-500 to-cyan-500"
                },
                {
                  icon: Shield,
                  title: "Handcrafted Quality",
                  description: "Each piece is carefully crafted by skilled artisans. We never compromise on quality, safety, or attention to detail.",
-                 delay: 0.2
+                 color: "from-green-500 to-emerald-500"
                },
                {
                  icon: Award,
                  title: "Sustainable Fashion",
                  description: "Eco-friendly production with biodegradable packaging. Beautiful clothes that are kind to your baby and our planet.",
-                 delay: 0.4
+                 color: "from-purple-500 to-pink-500"
                }
-             ].map((feature) => (
-               <motion.div
-                 key={feature.title}
-                 className="text-center group"
-                 variants={staggerItemVariants}
-                 whileHover={{ y: -5 }}
-                 transition={{ duration: 0.3 }}
-               >
-                 <motion.div
-                   className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow duration-300"
-                   whileHover={{
-                     scale: 1.1,
-                     rotate: [0, -10, 10, 0],
-                     transition: { duration: 0.5 }
-                   }}
-                 >
-                   <feature.icon className="w-10 h-10 text-primary" />
-                 </motion.div>
-                 <motion.h3
-                   className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300"
-                   variants={itemVariants}
-                 >
-                   {feature.title}
-                 </motion.h3>
-                 <motion.p
-                   className="text-muted-foreground leading-relaxed"
-                   variants={itemVariants}
-                 >
-                   {feature.description}
-                 </motion.p>
-               </motion.div>
+             ].map((feature, index) => (
+               <ProgressiveReveal key={feature.title} delay={index * 200}>
+                 <TiltCard tiltIntensity={8} className="group">
+                   <motion.div
+                     className="text-center h-full"
+                     whileHover={{ y: -8 }}
+                     transition={{ duration: 0.3, type: "spring", stiffness: 300 }}
+                   >
+                     <motion.div
+                       className={`w-20 h-20 bg-gradient-to-br ${feature.color} rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg relative overflow-hidden`}
+                       whileHover={{
+                         scale: 1.15,
+                         rotate: [0, -15, 15, 0],
+                         transition: { duration: 0.6, ease: "easeInOut" }
+                       }}
+                     >
+                       <motion.div
+                         className="absolute inset-0 bg-white/20 rounded-full"
+                         initial={{ scale: 0, opacity: 0 }}
+                         whileHover={{ scale: 1.5, opacity: 0.3 }}
+                         transition={{ duration: 0.4 }}
+                       />
+                       <feature.icon className="w-10 h-10 text-white relative z-10" />
+                     </motion.div>
+
+                     <motion.h3
+                       className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300"
+                       initial={{ opacity: 0, y: 20 }}
+                       whileInView={{ opacity: 1, y: 0 }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 0.6, delay: 0.2 }}
+                     >
+                       {feature.title}
+                     </motion.h3>
+
+                     <motion.p
+                       className="text-muted-foreground leading-relaxed"
+                       initial={{ opacity: 0 }}
+                       whileInView={{ opacity: 1 }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 0.6, delay: 0.4 }}
+                     >
+                       {feature.description}
+                     </motion.p>
+                   </motion.div>
+                 </TiltCard>
+               </ProgressiveReveal>
              ))}
-           </motion.div>
+           </div>
          </div>
        </AnimatedSection>
 
@@ -699,22 +720,40 @@ export default function Home() {
                  {productsToShow.length === 0 ? (
                    <motion.div
                      className="col-span-full text-center py-16"
-                     variants={itemVariants}
+                     initial={{ opacity: 0, scale: 0.9 }}
+                     animate={{ opacity: 1, scale: 1 }}
+                     transition={{ duration: 0.6 }}
                    >
-                     <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                     <motion.div
+                       animate={{
+                         rotate: [0, 10, -10, 0],
+                         scale: [1, 1.1, 1]
+                       }}
+                       transition={{ duration: 2, repeat: Infinity }}
+                     >
+                       <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                     </motion.div>
                      <h3 className="text-lg font-semibold mb-2">No products found</h3>
                      <p className="text-muted-foreground">Try adjusting your filters or check back later for new arrivals.</p>
                    </motion.div>
                  ) : (
-                   productsToShow.map((product) => (
-                     <motion.div
-                       key={product.id}
-                       variants={staggerItemVariants}
-                       whileHover={{ y: -8 }}
-                       transition={{ duration: 0.3 }}
-                     >
-                       <ProductCard product={product} />
-                     </motion.div>
+                   productsToShow.map((product, index) => (
+                     <ProgressiveReveal key={product.id} delay={index * 100}>
+                       <TiltCard tiltIntensity={5}>
+                         <motion.div
+                           whileHover={{
+                             y: -12,
+                             transition: { duration: 0.3, type: "spring", stiffness: 300 }
+                           }}
+                           initial={{ opacity: 0, y: 30 }}
+                           whileInView={{ opacity: 1, y: 0 }}
+                           viewport={{ once: true }}
+                           transition={{ duration: 0.6, delay: index * 0.1 }}
+                         >
+                           <ProductCard product={product} />
+                         </motion.div>
+                       </TiltCard>
+                     </ProgressiveReveal>
                    ))
                  )}
                </motion.div>
@@ -738,68 +777,76 @@ export default function Home() {
         </AnimatedSection>
 
        {/* Newsletter */}
-       <AnimatedSection className="py-24 px-6 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5">
-         <div className="container mx-auto text-center">
-           <motion.div
-             initial="hidden"
-             whileInView="visible"
-             viewport={{ once: true }}
-             variants={containerVariants}
-           >
+       <AnimatedSection className="py-24 px-6 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5 relative overflow-hidden">
+         {/* Background Particles */}
+         <ParticleSystem count={12} colors={["#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4"]} />
+
+         <div className="container mx-auto text-center relative z-10">
+           <ProgressiveReveal>
              <motion.h2
                className="text-4xl font-bold mb-6"
-               variants={itemVariants}
+               initial={{ opacity: 0, scale: 0.9 }}
+               whileInView={{ opacity: 1, scale: 1 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }}
              >
                Join Our Little Mirai Family
              </motion.h2>
              <motion.p
                className="text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed"
-               variants={itemVariants}
+               initial={{ opacity: 0, y: 30 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.8, delay: 0.2 }}
              >
                Be the first to know about new arrivals, exclusive offers, and adorable styling tips.
                Join thousands of parents who choose Little Mirai for their baby&apos;s precious wardrobe.
              </motion.p>
-           </motion.div>
+           </ProgressiveReveal>
 
-           <motion.div
-             className="max-w-lg mx-auto"
-             initial="hidden"
-             whileInView="visible"
-             viewport={{ once: true }}
-             variants={staggerContainerVariants}
-           >
+           <ProgressiveReveal delay={300}>
              <motion.div
-               className="flex gap-3 mb-4"
-               variants={staggerItemVariants}
+               className="max-w-lg mx-auto"
+               initial={{ opacity: 0, y: 40 }}
+               whileInView={{ opacity: 1, y: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.8 }}
              >
                <motion.div
-                 className="flex-1"
-                 whileFocus={{ scale: 1.02 }}
-                 transition={{ duration: 0.2 }}
+                 className="flex gap-3 mb-4"
+                 whileInView={{ opacity: 1 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.6, delay: 0.4 }}
                >
-                 <Input
-                   placeholder="Enter your email address"
-                   className="h-12 text-base"
-                   type="email"
-                 />
-               </motion.div>
-               <motion.div
-                 variants={scaleVariants}
-                 whileHover="hover"
-                 whileTap="tap"
-               >
-                 <Button size="lg" className="px-8 font-semibold h-12">
+                 <motion.div
+                   className="flex-1"
+                   whileFocus={{
+                     scale: 1.02,
+                     boxShadow: "0 0 0 2px rgba(99, 102, 241, 0.2)"
+                   }}
+                   transition={{ duration: 0.2 }}
+                 >
+                   <Input
+                     placeholder="Enter your email address"
+                     className="flex-1 h-12 text-base border-2 focus:border-primary"
+                     type="email"
+                   />
+                 </motion.div>
+                 <RippleButton className="px-8 font-semibold h-12 bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90 text-white border-0">
                    Subscribe
-                 </Button>
+                 </RippleButton>
                </motion.div>
+               <motion.p
+                 className="text-sm text-muted-foreground"
+                 initial={{ opacity: 0 }}
+                 whileInView={{ opacity: 1 }}
+                 viewport={{ once: true }}
+                 transition={{ duration: 0.6, delay: 0.6 }}
+               >
+                 We respect your privacy. Unsubscribe at any time.
+               </motion.p>
              </motion.div>
-             <motion.p
-               className="text-sm text-muted-foreground"
-               variants={staggerItemVariants}
-             >
-               We respect your privacy. Unsubscribe at any time.
-             </motion.p>
-           </motion.div>
+           </ProgressiveReveal>
          </div>
        </AnimatedSection>
 
