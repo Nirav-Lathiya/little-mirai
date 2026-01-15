@@ -22,11 +22,9 @@ import {
   FloatingIcon,
   TypewriterText,
   ParallaxBackground,
-  TiltCard,
-  DynamicIntroduction,
-  SequentialTextReveal,
-  CharByCharReveal
+  TiltCard
 } from "@/components/AdvancedAnimations"
+import { SplashScreen } from "@/components/SplashScreen"
 import { babyProducts } from "@/lib/data"
 import { useCart } from "@/context/CartContext"
 import { motion, useAnimation, useInView } from "framer-motion"
@@ -306,6 +304,7 @@ export default function Home() {
     ageGroups: [],
     priceRanges: []
   })
+  const [showSplash, setShowSplash] = useState(true)
 
   const filteredProducts = filterProducts(babyProducts, filters)
 
@@ -328,7 +327,11 @@ export default function Home() {
   const productsToShow = sortedProducts.slice(0, showCount)
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      {showSplash && (
+        <SplashScreen onComplete={() => setShowSplash(false)} />
+      )}
+      <div className="min-h-screen bg-background">
       {/* Navigation */}
       <nav className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-20 items-center justify-between px-6">
@@ -440,43 +443,38 @@ export default function Home() {
            </div>
 
             <div className="container mx-auto text-center relative z-10">
-              {/* Dynamic Introduction Sequence */}
               <motion.div
-                className="mb-8"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 1, delay: 0.5 }}
-              >
-                <DynamicIntroduction className="min-h-[200px] flex items-center justify-center" />
-              </motion.div>
-
-              {/* Enhanced Description */}
-              <motion.div
-                className="mb-12"
-                initial={{ opacity: 0, y: 40 }}
+                initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 2.5 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
               >
-                <SequentialTextReveal
-                  text="Every stitch tells a story. Every outfit captures a precious moment."
-                  className="text-lg md:text-xl text-muted-foreground max-w-4xl mx-auto leading-relaxed mb-6"
-                  delay={0.5}
-                  wordDelay={0.08}
-                />
-
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.6, delay: 4 }}
-                >
-                  <CharByCharReveal
-                    text="✨ Handcrafted with Love ✨"
-                    className="text-2xl md:text-3xl font-semibold text-primary mb-8"
-                    delay={0.8}
-                    charDelay={0.08}
+                <h1 className="text-5xl md:text-7xl font-bold mb-8 text-foreground leading-tight tracking-tight">
+                  <TypewriterText
+                    text="Precious Little"
+                    className="block"
+                    speed={100}
                   />
-                </motion.div>
+                  <motion.span
+                    className="text-primary block"
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8, delay: 1.5 }}
+                  >
+                    Mirai
+                  </motion.span>
+                </h1>
               </motion.div>
+
+              <motion.p
+                className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.8 }}
+              >
+                Discover our beautiful collection of baby booties, bibs, jhablas,
+                and socks. Handcrafted with love using premium natural materials for your precious
+                little one. Quality, comfort, and adorable style that lasts.
+              </motion.p>
 
               {/* Interactive Call-to-Action */}
               <motion.div
@@ -989,5 +987,6 @@ export default function Home() {
         </div>
       </footer>
     </div>
+    </>
   )
 }

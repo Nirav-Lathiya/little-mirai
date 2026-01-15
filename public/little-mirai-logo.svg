@@ -1,65 +1,96 @@
-<svg width="240" height="70" viewBox="0 0 240 70" xmlns="http://www.w3.org/2000/svg">
-  <!-- Background gradients -->
+<svg width="400" height="200" viewBox="0 0 400 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background gradient for depth -->
   <defs>
-    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#60a5fa;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#f472b6;stop-opacity:1" />
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef7f0;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#e0f2fe;stop-opacity:0.3" />
     </linearGradient>
+
+    <!-- Main heart icon gradient -->
+    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff6b9d" />
+      <stop offset="50%" style="stop-color:#c44569" />
+      <stop offset="100%" style="stop-color:#f8b500" />
+    </linearGradient>
+
+    <!-- Baby footprint gradient -->
+    <linearGradient id="footprintGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4ecdc4" />
+      <stop offset="100%" style="stop-color:#44a08d" />
+    </linearGradient>
+
+    <!-- Text gradient -->
     <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#1e40af;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="0%" style="stop-color:#6366f1" />
+      <stop offset="30%" style="stop-color:#a855f7" />
+      <stop offset="60%" style="stop-color:#ec4899" />
+      <stop offset="100%" style="stop-color:#f59e0b" />
     </linearGradient>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="rgba(0,0,0,0.15)"/>
+
+    <!-- Subtle shadow filter -->
+    <filter id="softShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000" flood-opacity="0.1"/>
+    </filter>
+
+    <!-- Inner glow effect -->
+    <filter id="innerGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feFlood flood-color="#fff" flood-opacity="0.3"/>
+      <feComposite in="SourceGraphic"/>
+      <feGaussianBlur stdDeviation="2"/>
+      <feOffset dx="0" dy="0"/>
+      <feComposite operator="over" in="SourceGraphic"/>
     </filter>
   </defs>
 
-  <!-- Baby bootie and bib combination -->
-  <g transform="translate(15, 20)">
-    <!-- Bootie shape -->
-    <path d="M8 18 Q8 12 14 12 L20 12 Q23 12 23 15 L23 25 Q23 28 20 28 L11 28 Q8 28 8 25 Z"
-          fill="url(#logoGradient)"
-          filter="url(#shadow)"/>
-    <!-- Bootie sole -->
-    <rect x="5" y="27" width="20" height="2" rx="1" fill="#1f2937"/>
-    <!-- Bootie laces -->
-    <circle cx="14" cy="15" r="1" fill="#ffffff"/>
-    <circle cx="17" cy="15" r="1" fill="#ffffff"/>
-    <circle cx="15.5" cy="18" r="0.8" fill="#ffffff"/>
+  <!-- Background circle for logo -->
+  <circle cx="100" cy="100" r="85" fill="url(#bgGradient)" opacity="0.6" filter="url(#softShadow)"/>
+
+  <!-- Main heart icon representing love and care -->
+  <path d="M100 140 Q85 125 75 110 Q70 100 75 90 Q80 75 100 75 Q120 75 125 90 Q130 100 125 110 Q115 125 100 140 Z"
+        fill="url(#heartGradient)"
+        filter="url(#softShadow)"
+        stroke="rgba(255,255,255,0.3)"
+        stroke-width="1"/>
+
+  <!-- Baby footprint inside heart - representing the little ones -->
+  <g transform="translate(88, 95)">
+    <ellipse cx="6" cy="8" rx="3" ry="4" fill="url(#footprintGradient)" opacity="0.9"/>
+    <ellipse cx="14" cy="8" rx="3" ry="4" fill="url(#footprintGradient)" opacity="0.9"/>
+    <circle cx="6" cy="4" r="1.5" fill="url(#footprintGradient)" opacity="1"/>
+    <circle cx="14" cy="4" r="1.5" fill="url(#footprintGradient)" opacity="1"/>
+    <circle cx="10" cy="12" r="2" fill="url(#footprintGradient)" opacity="0.8"/>
   </g>
 
-  <!-- Bib shape -->
-  <g transform="translate(35, 15)">
-    <path d="M0 10 Q0 5 5 5 L15 5 Q20 5 20 10 L18 25 Q18 30 13 30 L7 30 Q2 30 2 25 Z"
-          fill="url(#logoGradient)"
-          filter="url(#shadow)"/>
-    <!-- Bib neck strap -->
-    <rect x="8" y="0" width="4" height="8" rx="2" fill="url(#logoGradient)"/>
-    <!-- Bib pocket -->
-    <rect x="6" y="18" width="8" height="6" rx="2" fill="#ffffff" opacity="0.8"/>
+  <!-- Gentle sparkle/star elements around the heart -->
+  <g opacity="0.7">
+    <polygon points="45,60 48,68 56,68 50,73 52,81 45,76 38,81 40,73 34,68 42,68" fill="#f8b500" filter="url(#innerGlow)"/>
+    <polygon points="155,50 158,58 166,58 160,63 162,71 155,66 148,71 150,63 144,58 152,58" fill="#4ecdc4" filter="url(#innerGlow)"/>
+    <polygon points="35,140 38,148 46,148 40,153 42,161 35,156 28,161 30,153 24,148 32,148" fill="#a855f7" filter="url(#innerGlow)"/>
+    <polygon points="165,130 168,138 176,138 170,143 172,151 165,146 158,151 160,143 154,138 162,138" fill="#ec4899" filter="url(#innerGlow)"/>
   </g>
 
-  <!-- Text "Little Mirai" -->
-  <text x="85" y="30" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="url(#textGradient)">
-    Little
-  </text>
-  <text x="85" y="50" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="url(#textGradient)">
-    Mirai
-  </text>
+  <!-- Brand Text -->
+  <g transform="translate(180, 0)">
+    <!-- "Little" in elegant, soft script -->
+    <text x="0" y="85" font-family="serif" font-size="28" font-weight="300" fill="url(#textGradient)" opacity="0.95" style="font-style: italic;">
+      Little
+    </text>
 
-  <!-- Decorative hearts -->
-  <g transform="translate(210, 15)">
-    <path d="M5 10 C5 7, 8 5, 10 7 C12 5, 15 7, 15 10 C15 12, 10 15, 10 15 C10 15, 5 12, 5 10 Z"
-          fill="#f472b6" opacity="0.7"/>
-  </g>
-  <g transform="translate(200, 35)">
-    <path d="M3 7 C3 5, 5 4, 7 5 C8 4, 10 5, 10 7 C10 8, 7 10, 7 10 C7 10, 3 8, 3 7 Z"
-          fill="#60a5fa" opacity="0.7"/>
+    <!-- "Mirai" in modern, elegant typography -->
+    <text x="0" y="120" font-family="sans-serif" font-size="32" font-weight="600" fill="url(#textGradient)" letter-spacing="2px">
+      MIRAI
+    </text>
+
+    <!-- Subtle tagline -->
+    <text x="0" y="145" font-family="sans-serif" font-size="12" font-weight="300" fill="#6b7280" letter-spacing="1px">
+      Precious Moments
+    </text>
   </g>
 
-  <!-- Tagline -->
-  <text x="85" y="62" font-family="Arial, sans-serif" font-size="10" fill="#6b7280">
-    Precious Baby Wear
-  </text>
+  <!-- Decorative elements - gentle curves representing care and protection -->
+  <path d="M40 160 Q60 140 80 160 Q100 180 120 160 Q140 140 160 160"
+        stroke="#e0f2fe" stroke-width="2" fill="none" opacity="0.4" stroke-linecap="round" stroke-dasharray="5,5"/>
+
+  <!-- Bottom accent line -->
+  <line x1="40" y1="170" x2="360" y2="170" stroke="url(#textGradient)" stroke-width="1" opacity="0.3" stroke-linecap="round"/>
 </svg>

@@ -515,47 +515,24 @@ export const InteractiveText = ({
   className?: string,
   hoverEffect?: "glow" | "bounce" | "scale" | "color"
 }) => {
-  const getHoverVariants = () => {
-    switch (hoverEffect) {
-      case "glow":
-        return {
-          hover: {
-            textShadow: "0 0 20px rgba(99, 102, 241, 0.5)",
-            scale: 1.05
-          }
-        }
-      case "bounce":
-        return {
-          hover: {
-            y: [-2, 2, -2],
-            transition: {
-              y: { duration: 0.6, repeat: Infinity, ease: "easeInOut" }
-            }
-          }
-        }
-      case "scale":
-        return {
-          hover: { scale: 1.1 },
-          tap: { scale: 0.95 }
-        }
-      case "color":
-        return {
-          hover: {
-            color: "#6366f1",
-            transition: { duration: 0.3 }
-          }
-        }
-      default:
-        return {}
-    }
-  }
-
   return (
     <motion.span
       className={`${className} cursor-pointer select-none`}
-      variants={getHoverVariants()}
-      whileHover="hover"
-      whileTap="tap"
+      whileHover={
+        hoverEffect === "glow" ? {
+          textShadow: "0 0 20px rgba(99, 102, 241, 0.5)",
+          scale: 1.05
+        } : hoverEffect === "scale" ? { scale: 1.1 } : undefined
+      }
+      whileTap={{ scale: 0.95 }}
+      animate={hoverEffect === "bounce" ? {
+        y: [0, -2, 0],
+      } : undefined}
+      transition={hoverEffect === "bounce" ? {
+        duration: 2,
+        repeat: Infinity,
+        ease: [0.4, 0.0, 0.6, 1]
+      } : undefined}
     >
       {text}
     </motion.span>
@@ -574,17 +551,6 @@ export const GradientText = ({
   colors?: string[],
   animate?: boolean
 }) => {
-  const gradientVariants = animate ? {
-    animate: {
-      backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-    },
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "linear"
-    }
-  } : {}
-
   return (
     <motion.span
       className={`${className} bg-gradient-to-r bg-clip-text text-transparent`}
@@ -592,8 +558,14 @@ export const GradientText = ({
         backgroundImage: `linear-gradient(45deg, ${colors.join(", ")})`,
         backgroundSize: "200% 200%"
       }}
-      variants={gradientVariants}
-      animate={animate ? "animate" : undefined}
+      animate={animate ? {
+        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
+      } : undefined}
+      transition={animate ? {
+        duration: 3,
+        repeat: Infinity,
+        ease: "linear"
+      } : undefined}
     >
       {text}
     </motion.span>
