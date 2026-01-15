@@ -9,15 +9,95 @@ import { Separator } from "@/components/ui/separator"
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-import { ShoppingCart, Heart, Search, Menu, Star, Truck, Shield, Award, ChevronDown, Grid, List, Package } from "lucide-react"
+import { ShoppingCart, Heart, Search, Menu, Star, Truck, Shield, Award, ChevronDown, Grid, List, Package, Baby, Sparkles, Heart as HeartIcon } from "lucide-react"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { ProductModal } from "@/components/ProductModal"
 import { CartModal } from "@/components/CartModal"
 import { ProductFilters, ProductFiltersMobile, FilterState } from "@/components/ProductFilters"
 import { babyProducts } from "@/lib/data"
 import { useCart } from "@/context/CartContext"
+import { motion, useAnimation, useInView } from "framer-motion"
+import { useEffect, useRef } from "react"
 
+// Animation variants
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 }
+}
 
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 }
+}
+
+const staggerContainerVariants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.2
+    }
+  }
+}
+
+const staggerItemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0 }
+}
+
+const floatVariants = {
+  animate: {
+    y: [-10, 10, -10],
+    transition: {
+      duration: 3,
+      repeat: Infinity
+    }
+  }
+}
+
+const scaleVariants = {
+  hover: { scale: 1.05 },
+  tap: { scale: 0.95 }
+}
+
+// Animated components
+const AnimatedSection = ({ children, className, delay = 0, id }: { children: React.ReactNode, className?: string, delay?: number, id?: string }) => {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const controls = useAnimation()
+
+  useEffect(() => {
+    if (isInView) {
+      controls.start("visible")
+    }
+  }, [isInView, controls])
+
+  return (
+    <motion.section
+      ref={ref}
+      initial="hidden"
+      animate={controls}
+      variants={containerVariants}
+      className={className}
+      style={{ transitionDelay: `${delay}s` }}
+      id={id}
+    >
+      {children}
+    </motion.section>
+  )
+}
+
+const FloatingIcon = ({ children, delay = 0 }: { children: React.ReactNode, delay?: number }) => (
+  <motion.div
+    variants={floatVariants}
+    animate="animate"
+    style={{
+      animationDelay: `${delay}s`
+    }}
+  >
+    {children}
+  </motion.div>
+)
 
 function ProductCard({ product }: { product: typeof babyProducts[0] }) {
   const { dispatch } = useCart()
@@ -46,24 +126,52 @@ function ProductCard({ product }: { product: typeof babyProducts[0] }) {
 
   return (
     <ProductModal product={product}>
-      <Card className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 border border-border/50 hover:border-primary/20 bg-card h-full">
+      <Card className="group cursor-pointer transition-all duration-300 hover:shadow-xl hover:shadow-primary/10 hover:-translate-y-2 border border-border/50 hover:border-primary/20 bg-card h-full overflow-hidden">
         <CardHeader className="p-0">
           <div className="relative aspect-square bg-gradient-to-br from-primary/5 to-accent/10 rounded-t-lg overflow-hidden">
-            <Image
-              src={product.image}
-              alt={`Baby wearing ${product.name.toLowerCase()}`}
-              fill
-              className="object-cover transition-all duration-500 group-hover:scale-110"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 25vw, 20vw"
-            />
+            <motion.div
+              className="w-full h-full"
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Image
+                src={product.image}
+                alt={`Baby wearing ${product.name.toLowerCase()}`}
+                fill
+                className="object-cover"
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 25vw, 20vw"
+              />
+            </motion.div>
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
-            {product.isNew && (
-              <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground font-semibold shadow-sm">New</Badge>
-            )}
-            {product.isSale && (
-              <Badge className="absolute top-3 right-3 bg-destructive text-destructive-foreground font-semibold shadow-sm">Sale</Badge>
-            )}
-            <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+            >
+              {product.isNew && (
+                <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground font-semibold shadow-sm">New</Badge>
+              )}
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+            >
+              {product.isSale && (
+                <Badge className="absolute top-3 right-3 bg-destructive text-destructive-foreground font-semibold shadow-sm">Sale</Badge>
+              )}
+            </motion.div>
+
+            <motion.div
+              className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              initial={{ opacity: 0, y: -10 }}
+              whileHover={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2 }}
+            >
               <Button
                 variant="secondary"
                 size="icon"
@@ -72,22 +180,51 @@ function ProductCard({ product }: { product: typeof babyProducts[0] }) {
               >
                 <Heart className="w-4 h-4" />
               </Button>
-            </div>
+            </motion.div>
           </div>
         </CardHeader>
+
         <CardContent className="p-5 flex-1 flex flex-col">
-          <div className="flex items-center gap-2 mb-3">
+          <motion.div
+            className="flex items-center gap-2 mb-3"
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+          >
             <Badge variant="secondary" className="text-xs font-medium px-2 py-1 bg-primary/10 text-primary border-primary/20">
               {product.category}
             </Badge>
-          </div>
-          <CardTitle className="text-lg font-semibold mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
-            {product.name}
-          </CardTitle>
-          <p className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed flex-1">
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+          >
+            <CardTitle className="text-lg font-semibold mb-2 line-clamp-2 leading-tight group-hover:text-primary transition-colors">
+              {product.name}
+            </CardTitle>
+          </motion.div>
+
+          <motion.p
+            className="text-sm text-muted-foreground mb-4 line-clamp-2 leading-relaxed flex-1"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.3 }}
+          >
             {product.description}
-          </p>
-          <div className="flex items-center gap-2 mb-4">
+          </motion.p>
+
+          <motion.div
+            className="flex items-center gap-2 mb-4"
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+          >
             <div className="flex items-center gap-1">
               {[...Array(5)].map((_, i) => (
                 <Star
@@ -97,8 +234,15 @@ function ProductCard({ product }: { product: typeof babyProducts[0] }) {
               ))}
             </div>
             <span className="text-sm text-muted-foreground font-medium">({product.reviews})</span>
-          </div>
-          <div className="flex items-baseline gap-3 mb-4">
+          </motion.div>
+
+          <motion.div
+            className="flex items-baseline gap-3 mb-4"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+          >
             <span className="text-2xl font-bold text-primary">₹{product.price}</span>
             {product.originalPrice && (
               <span className="text-sm text-muted-foreground line-through font-medium">₹{product.originalPrice}</span>
@@ -108,16 +252,23 @@ function ProductCard({ product }: { product: typeof babyProducts[0] }) {
                 {Math.round((1 - product.price / product.originalPrice) * 100)}% OFF
               </Badge>
             )}
-          </div>
+          </motion.div>
         </CardContent>
+
         <CardFooter className="p-5 pt-0">
-          <Button
-            className="w-full font-semibold h-11"
-            onClick={handleAddToCart}
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.2 }}
           >
-            <ShoppingCart className="w-4 h-4 mr-2" />
-            Add to Cart
-          </Button>
+            <Button
+              className="w-full font-semibold h-11"
+              onClick={handleAddToCart}
+            >
+              <ShoppingCart className="w-4 h-4 mr-2" />
+              Add to Cart
+            </Button>
+          </motion.div>
         </CardFooter>
       </Card>
     </ProductModal>
@@ -269,84 +420,212 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/10">
-        <div className="container mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold mb-8 text-foreground leading-tight tracking-tight">
-            Precious Little<br />
-            <span className="text-primary">Mirai</span>
-          </h1>
-          <p className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed">
-            Discover our beautiful collection of baby booties, bibs, jhablas,
-            and socks. Handcrafted with love using premium natural materials for your precious
-            little one. Quality, comfort, and adorable style that lasts.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <Button size="lg" className="text-lg px-10 py-4 h-auto font-semibold">
-              Shop Collection
-            </Button>
-            <Button size="lg" variant="outline" className="text-lg px-10 py-4 h-auto font-semibold">
-              Learn More
-            </Button>
-          </div>
-        </div>
-      </section>
+       {/* Hero Section */}
+       <motion.section
+         className="py-24 px-6 bg-gradient-to-br from-primary/5 via-background to-accent/10 relative overflow-hidden"
+         initial="hidden"
+         animate="visible"
+         variants={staggerContainerVariants}
+       >
+         {/* Floating Background Elements */}
+         <div className="absolute inset-0 pointer-events-none">
+           <FloatingIcon delay={0}>
+             <div className="absolute top-20 left-10 text-primary/20">
+               <Baby className="w-12 h-12" />
+             </div>
+           </FloatingIcon>
+           <FloatingIcon delay={1}>
+             <div className="absolute top-40 right-20 text-accent/20">
+               <Sparkles className="w-10 h-10" />
+             </div>
+           </FloatingIcon>
+           <FloatingIcon delay={2}>
+             <div className="absolute bottom-32 left-20 text-primary/15">
+               <HeartIcon className="w-8 h-8" />
+             </div>
+           </FloatingIcon>
+           <FloatingIcon delay={0.5}>
+             <div className="absolute bottom-20 right-10 text-accent/20">
+               <Sparkles className="w-6 h-6" />
+             </div>
+           </FloatingIcon>
+         </div>
 
-      {/* Features */}
-      <section className="py-20 px-6 bg-muted/20">
-        <div className="container mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold mb-4">Why Choose Little Mirai</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              We create beautiful, high-quality baby clothing and accessories with love,
-              using only the finest natural materials for your precious little one.
-            </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div className="text-center">
-              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Truck className="w-10 h-10 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Premium Materials</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                We use only the finest organic cotton, bamboo, merino wool, and silk.
-                Gentle on baby&apos;s sensitive skin, naturally soft and breathable.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Shield className="w-10 h-10 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Handcrafted Quality</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Each piece is carefully crafted by skilled artisans. We never compromise
-                on quality, safety, or attention to detail.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm">
-                <Award className="w-10 h-10 text-primary" />
-              </div>
-              <h3 className="text-xl font-semibold mb-3">Sustainable Fashion</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                Eco-friendly production with biodegradable packaging.
-                Beautiful clothes that are kind to your baby and our planet.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
+         <div className="container mx-auto text-center relative z-10">
+           <motion.h1
+             className="text-5xl md:text-7xl font-bold mb-8 text-foreground leading-tight tracking-tight"
+             variants={staggerItemVariants}
+           >
+             <motion.span variants={itemVariants}>Precious Little</motion.span><br />
+             <motion.span
+               className="text-primary"
+               variants={itemVariants}
+             >
+               Mirai
+             </motion.span>
+           </motion.h1>
+
+           <motion.p
+             className="text-xl text-muted-foreground mb-12 max-w-3xl mx-auto leading-relaxed"
+             variants={staggerItemVariants}
+           >
+             Discover our beautiful collection of baby booties, bibs, jhablas,
+             and socks. Handcrafted with love using premium natural materials for your precious
+             little one. Quality, comfort, and adorable style that lasts.
+           </motion.p>
+
+           <motion.div
+             className="flex flex-col sm:flex-row gap-6 justify-center"
+             variants={staggerItemVariants}
+           >
+             <motion.div variants={scaleVariants} whileHover="hover" whileTap="tap">
+               <Button size="lg" className="text-lg px-10 py-4 h-auto font-semibold">
+                 Shop Collection
+               </Button>
+             </motion.div>
+             <motion.div variants={scaleVariants} whileHover="hover" whileTap="tap">
+               <Button size="lg" variant="outline" className="text-lg px-10 py-4 h-auto font-semibold">
+                 Learn More
+               </Button>
+             </motion.div>
+           </motion.div>
+         </div>
+       </motion.section>
+
+       {/* Features */}
+       <AnimatedSection className="py-20 px-6 bg-muted/20">
+         <div className="container mx-auto">
+           <motion.div
+             className="text-center mb-16"
+             initial="hidden"
+             whileInView="visible"
+             viewport={{ once: true }}
+             variants={containerVariants}
+           >
+             <motion.h2
+               className="text-3xl font-bold mb-4"
+               variants={itemVariants}
+             >
+               Why Choose Little Mirai
+             </motion.h2>
+             <motion.p
+               className="text-muted-foreground max-w-2xl mx-auto"
+               variants={itemVariants}
+             >
+               We create beautiful, high-quality baby clothing and accessories with love,
+               using only the finest natural materials for your precious little one.
+             </motion.p>
+           </motion.div>
+
+           <motion.div
+             className="grid grid-cols-1 md:grid-cols-3 gap-12"
+             initial="hidden"
+             whileInView="visible"
+             viewport={{ once: true, margin: "-50px" }}
+             variants={staggerContainerVariants}
+           >
+             {[
+               {
+                 icon: Truck,
+                 title: "Premium Materials",
+                 description: "We use only the finest organic cotton, bamboo, merino wool, and silk. Gentle on baby's sensitive skin, naturally soft and breathable.",
+                 delay: 0
+               },
+               {
+                 icon: Shield,
+                 title: "Handcrafted Quality",
+                 description: "Each piece is carefully crafted by skilled artisans. We never compromise on quality, safety, or attention to detail.",
+                 delay: 0.2
+               },
+               {
+                 icon: Award,
+                 title: "Sustainable Fashion",
+                 description: "Eco-friendly production with biodegradable packaging. Beautiful clothes that are kind to your baby and our planet.",
+                 delay: 0.4
+               }
+             ].map((feature) => (
+               <motion.div
+                 key={feature.title}
+                 className="text-center group"
+                 variants={staggerItemVariants}
+                 whileHover={{ y: -5 }}
+                 transition={{ duration: 0.3 }}
+               >
+                 <motion.div
+                   className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-6 shadow-sm group-hover:shadow-lg group-hover:shadow-primary/20 transition-shadow duration-300"
+                   whileHover={{
+                     scale: 1.1,
+                     rotate: [0, -10, 10, 0],
+                     transition: { duration: 0.5 }
+                   }}
+                 >
+                   <feature.icon className="w-10 h-10 text-primary" />
+                 </motion.div>
+                 <motion.h3
+                   className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors duration-300"
+                   variants={itemVariants}
+                 >
+                   {feature.title}
+                 </motion.h3>
+                 <motion.p
+                   className="text-muted-foreground leading-relaxed"
+                   variants={itemVariants}
+                 >
+                   {feature.description}
+                 </motion.p>
+               </motion.div>
+             ))}
+           </motion.div>
+         </div>
+       </AnimatedSection>
 
        {/* Featured Products */}
-       <section className="py-24 px-6 bg-muted/10" id="products">
+       <AnimatedSection className="py-24 px-6 bg-muted/10" id="products">
          <div className="container mx-auto">
-           <div className="text-center mb-16">
-             <h2 className="text-4xl md:text-5xl font-bold mb-6">Adorable Collection</h2>
-             <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+           <motion.div
+             className="text-center mb-16"
+             initial="hidden"
+             whileInView="visible"
+             viewport={{ once: true }}
+             variants={containerVariants}
+           >
+             <motion.h2
+               className="text-4xl md:text-5xl font-bold mb-6"
+               variants={itemVariants}
+             >
+               <motion.span
+                 initial={{ opacity: 0, scale: 0.8 }}
+                 whileInView={{ opacity: 1, scale: 1 }}
+                 viewport={{ once: true }}
+                 transition={{
+                   duration: 0.6,
+                   ease: [0.25, 0.46, 0.45, 0.94]
+                 }}
+               >
+                 Adorable
+               </motion.span>{" "}
+               <motion.span
+                 className="text-primary"
+                 initial={{ opacity: 0, scale: 0.8 }}
+                 whileInView={{ opacity: 1, scale: 1 }}
+                 viewport={{ once: true }}
+                 transition={{
+                   duration: 0.6,
+                   delay: 0.2,
+                   ease: [0.25, 0.46, 0.45, 0.94]
+                 }}
+               >
+                 Collection
+               </motion.span>
+             </motion.h2>
+             <motion.p
+               className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+               variants={itemVariants}
+             >
                Discover our beautiful collection of baby booties, bibs, socks, and clothing, each piece
                handcrafted with love using premium natural materials. Perfect for your precious Little Mirai.
-             </p>
-           </div>
+             </motion.p>
+           </motion.div>
 
            {/* Filters and Sorting */}
            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 mb-12">
@@ -410,19 +689,35 @@ export default function Home() {
                </div>
 
                {/* Product Grid */}
-               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8">
+               <motion.div
+                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 lg:gap-8"
+                 initial="hidden"
+                 whileInView="visible"
+                 viewport={{ once: true, margin: "-50px" }}
+                 variants={staggerContainerVariants}
+               >
                  {productsToShow.length === 0 ? (
-                   <div className="col-span-full text-center py-16">
+                   <motion.div
+                     className="col-span-full text-center py-16"
+                     variants={itemVariants}
+                   >
                      <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                      <h3 className="text-lg font-semibold mb-2">No products found</h3>
                      <p className="text-muted-foreground">Try adjusting your filters or check back later for new arrivals.</p>
-                   </div>
+                   </motion.div>
                  ) : (
                    productsToShow.map((product) => (
-                     <ProductCard key={product.id} product={product} />
+                     <motion.div
+                       key={product.id}
+                       variants={staggerItemVariants}
+                       whileHover={{ y: -8 }}
+                       transition={{ duration: 0.3 }}
+                     >
+                       <ProductCard product={product} />
+                     </motion.div>
                    ))
                  )}
-               </div>
+               </motion.div>
 
                {/* Load More Button */}
                {productsToShow.length < sortedProducts.length && (
@@ -437,36 +732,76 @@ export default function Home() {
                    </Button>
                  </div>
                )}
-             </div>
-           </div>
-         </div>
-       </section>
-
-      {/* Newsletter */}
-      <section className="py-24 px-6 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5">
-        <div className="container mx-auto text-center">
-          <h2 className="text-4xl font-bold mb-6">Join Our Little Mirai Family</h2>
-          <p className="text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed">
-            Be the first to know about new arrivals, exclusive offers, and adorable styling tips.
-            Join thousands of parents who choose Little Mirai for their baby&apos;s precious wardrobe.
-          </p>
-          <div className="max-w-lg mx-auto">
-            <div className="flex gap-3">
-              <Input
-                placeholder="Enter your email address"
-                className="flex-1 h-12 text-base"
-                type="email"
-              />
-              <Button size="lg" className="px-8 font-semibold">
-                Subscribe
-              </Button>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground mt-4">
-              We respect your privacy. Unsubscribe at any time.
-            </p>
           </div>
-        </div>
-      </section>
+        </AnimatedSection>
+
+       {/* Newsletter */}
+       <AnimatedSection className="py-24 px-6 bg-gradient-to-r from-primary/5 via-accent/5 to-primary/5">
+         <div className="container mx-auto text-center">
+           <motion.div
+             initial="hidden"
+             whileInView="visible"
+             viewport={{ once: true }}
+             variants={containerVariants}
+           >
+             <motion.h2
+               className="text-4xl font-bold mb-6"
+               variants={itemVariants}
+             >
+               Join Our Little Mirai Family
+             </motion.h2>
+             <motion.p
+               className="text-xl text-muted-foreground mb-10 max-w-3xl mx-auto leading-relaxed"
+               variants={itemVariants}
+             >
+               Be the first to know about new arrivals, exclusive offers, and adorable styling tips.
+               Join thousands of parents who choose Little Mirai for their baby&apos;s precious wardrobe.
+             </motion.p>
+           </motion.div>
+
+           <motion.div
+             className="max-w-lg mx-auto"
+             initial="hidden"
+             whileInView="visible"
+             viewport={{ once: true }}
+             variants={staggerContainerVariants}
+           >
+             <motion.div
+               className="flex gap-3 mb-4"
+               variants={staggerItemVariants}
+             >
+               <motion.div
+                 className="flex-1"
+                 whileFocus={{ scale: 1.02 }}
+                 transition={{ duration: 0.2 }}
+               >
+                 <Input
+                   placeholder="Enter your email address"
+                   className="h-12 text-base"
+                   type="email"
+                 />
+               </motion.div>
+               <motion.div
+                 variants={scaleVariants}
+                 whileHover="hover"
+                 whileTap="tap"
+               >
+                 <Button size="lg" className="px-8 font-semibold h-12">
+                   Subscribe
+                 </Button>
+               </motion.div>
+             </motion.div>
+             <motion.p
+               className="text-sm text-muted-foreground"
+               variants={staggerItemVariants}
+             >
+               We respect your privacy. Unsubscribe at any time.
+             </motion.p>
+           </motion.div>
+         </div>
+       </AnimatedSection>
 
       {/* Footer */}
       <footer className="py-16 px-6 bg-muted/30 border-t border-border/50">
